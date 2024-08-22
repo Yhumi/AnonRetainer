@@ -36,6 +36,12 @@ namespace RetainerAnonymiser.RetainerAddon
             Svc.AddonLifecycle.RegisterListener(AddonEvent.PreFinalize, ["RetainerList"], OnRetainerListEvent);
         }
 
+        public static void Dispose()
+        {
+            Safe(() => Svc.AddonLifecycle.UnregisterListener(AddonEvent.PreDraw, ["RetainerList"], OnRetainerListEvent));
+            Safe(() => Svc.AddonLifecycle.UnregisterListener(AddonEvent.PreFinalize, ["RetainerList"], OnRetainerListEvent));
+        }
+
         public static void Enable()
         {
             Enabled = true;

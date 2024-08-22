@@ -83,12 +83,14 @@ public sealed class RetainerAnonymiser : IDalamudPlugin
         PluginUi.Dispose();
 
         Svc.Commands.RemoveHandler(CommandName);
-        Svc.PluginInterface.UiBuilder.OpenConfigUi -= DrawSettingsUI;
-        Svc.PluginInterface.UiBuilder.Draw -= ws.Draw;
-        Svc.PluginInterface.UiBuilder.OpenMainUi -= DrawMainUI;
+        Safe(() => Svc.PluginInterface.UiBuilder.OpenConfigUi -= DrawSettingsUI);
+        Safe(() => Svc.PluginInterface.UiBuilder.Draw -= ws.Draw);
+        Safe(() => Svc.PluginInterface.UiBuilder.OpenMainUi -= DrawMainUI);
 
-        Svc.ClientState.Login -= OnClientLogin;
-        Svc.ClientState.Logout -= OnClientLogout;
+        Safe(() => Svc.ClientState.Login -= OnClientLogin);
+        Safe(() => Svc.ClientState.Logout -= OnClientLogout);
+
+        Safe(() => Svc.Framework.Update -= Tick);
 
         ws?.RemoveAllWindows();
         ws = null!;
